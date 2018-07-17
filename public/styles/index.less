@@ -1,0 +1,55 @@
+@color-white: #fff;
+@color-black: #000;
+@color-red: rgb(255, 68, 60);
+
+.link-restyle (@c: #fff) {
+    color: @c;
+    text-decoration: none;
+    &:visited {
+        color: @c;
+    }
+    text-decoration: none;
+}
+
+.animate (
+    @s: 0.3s, 
+    @timing-func: linear,
+    @duration: 0s
+) {
+    -webkit-transition: all @s @timing-func @duration;
+    -moz-transition: all @s @timing-func @duration;
+    -o-transition: all @s @timing-func @duration;
+    transition: all @s @timing-func @duration;
+}
+
+.calc(@prop: width, @val) {
+    @prop: calc(~"@{val}");
+    @prop: -moz-calc(~"@{val}");
+    @prop: -webkit-calc(~"@{val}");
+    @prop: -o-calc(~"@{val}");
+}
+
+.min-content-height() {
+    height: -moz-min-content;
+    height: -webkit-min-content;
+    height: min-content;
+}
+
+@font-face {
+    font-family: 'outrun';
+    src: local('outrunfuture'),
+         url(../fonts/s.otf);
+}
+
+@font-face {
+    font-family: 'outrun';
+    src: url(../fonts/b.otf);
+    font-weight: bold; 
+}
+
+@font-face {
+    font-family: 'outrun';
+    src: url(../fonts/bi.otf);
+    font-weight: bold; 
+    font-style: italic;
+}

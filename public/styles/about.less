@@ -1,0 +1,44 @@
+@import 'index.less';
+
+.about {
+    background: url(../images/bg2.png);
+    margin: -280px 0;
+    background-position: 50% 50%;
+    background-size: 105vw 105vh;
+    z-index: 1000;
+}
+
+.about-container {
+    display: flex;
+    flex-direction: row;
+    margin-top: -280px;
+}
+
+.about-imgs {
+    width: 60%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.about-imgs__img {
+    object-fit: contain;
+    width: 320px;
+    height: 212px;
+    &:nth-child(2n) {
+        position: absolute;
+        margin-left: -160px;
+        margin-top: 106px;
+
+    }
+}
+
+.about-dist {
+    width: 36%;
+}
+
+.about-dist__text {
+    font-family: sans-serif;
+    font-size: 14px;
+    line-height: 2.2;
+}
