@@ -1,76 +1,53 @@
-window.onload = function () {
-    const oReq = new XMLHttpRequest();
-    oReq.onload = reqListener;
-    oReq.open("get", "images/slider/gallery.json", true);
-    oReq.send();
+(function() {
+    function loadImages() {
+        const SLIDE_INTERVAL = 4000;
 
-    function reqListener(e) {
-        let gallery = JSON.parse(this.responseText);
-        const galleryList = document.querySelector('.gallery-list');
-        gallery.forEach((src, index, link) => {
-            const galleryItem = document.createElement('li');
-            galleryItem.classList.add('gallery-item');
-            galleryItem.setAttribute('img-id', index);
-            index === 0 ? galleryItem.classList.add("active_slide") : null;
+        const gallery = document.querySelector('.gallery');
+        const galleryList = gallery.querySelector('.gallery-list');
 
-            const img = new Image();
-            img.src = src;
-            img.classList.add("gallery-item__img");
-
-            galleryItem.appendChild(img);
-            galleryList.appendChild(galleryItem);
-            switchBg();
-        });
-
-        const items = document.querySelectorAll('.gallery-item');
-
-        function switchState (items, item) {
-            items.forEach(e => e.classList.remove('active_slide'));
-            item.classList.add('active_slide');
-            switchBg();
+        function switchBg (item) {
+            gallery.style.backgroundImage = `url(${item.querySelector('.gallery-item__img').src}`;
         }
 
-        function switchBg () {
-            document.querySelector('.gallery').style.background =
-                `url(${document.querySelector('.active_slide').children[0].src}) no-repeat 0% 0%`;
-            document.querySelector('.gallery').style.backgroundSize = '100% 100%';
-        }
+        fetch('images/slider/gallery.json')
+            .then(res => res.json())
+            .then(gallery => {
+                const items = gallery.map((src, index) => {
+                    const galleryItem = document.createElement('li');
+                    galleryItem.classList.add('gallery-item');
+                    index || galleryItem.classList.add('gallery-item_active');
 
-        const time = 4000;
-        let id = 0;
-        let mtm = setTimeout(function tt() {
-            if (id == items.length)
-                id = 0;
-            switchState(items, document.querySelector(`.gallery-item[img-id="${id++}"]`));
-            let tm = setTimeout(tt, time);
-            document
-                .querySelectorAll('.gallery-item')
-                .forEach(e => 
-                    e.addEventListener('click', () => clearTimeout(tm))
-                );
-        }, time);
+                    const img = new Image();
+                    img.src = src;
+                    img.classList.add('gallery-item__img');
 
-        items.forEach(item => 
-            item.addEventListener('click', e => {
-                items.forEach(e => e.classList.remove('active_slide'));
-                item.classList.add('active_slide');
-                clearTimeout(mtm);
-                switchBg();
-            })
-        );
+                    galleryItem.appendChild(img);
+                    // TODO: не трогать DOM лишний раз
+                    galleryList.appendChild(galleryItem);
+
+                    return galleryItem;
+                });
+
+                switchBg(items[0]);
+
+                let index = 0;
+                let slideInterval = setInterval(function () {
+                    index === items.length && (index = 0);
+
+                    galleryList.querySelector('.gallery-item_active').classList.remove('gallery-item_active');
+                    items[index].classList.add('gallery-item_active');
+                    switchBg(items[index]);
+
+                    index++;
+                }, SLIDE_INTERVAL);
+
+                galleryList.addEventListener('click', e => {
+                    if (!e.target.classList.contains('gallery-item')) return;
+
+                    clearInterval(slideInterval);
+                });
+            });
     }
-    /* 
-    <li class="gallery-item">
-        <img class="gallery-item__img" src="./images/slider/s1.png">
-    </li>
-    <li class="gallery-item">
-        <img class="gallery-item__img" src="./images/slider/s2.png">
-    </li>
-    <li class="gallery-item">
-        <img class="gallery-item__img" src="./images/slider/s3.png">
-    </li>
-    <li class="gallery-item active_slide">
-        <img class="gallery-item__img" src="./images/slider/s4.png">
-    </li> 
-    */
-}
+
+    window.addEventListener('load', loadImages);
+})();

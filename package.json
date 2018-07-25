@@ -4,12 +4,21 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "compile": "./bin/less",
+    "gallery": "./bin/gallery",
+    "server": "node server",
+    "test": "mocha gallery.test.js",
+    "start": "npm run compile && npm run gallery && npm run server"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.3"
+  },
+  "devDependencies": {
+    "globby": "^8.0.1",
+    "less": "^3.8.0",
+    "mocha": "^5.2.0",
+    "mock-fs": "^4.5.0"
   }
 }

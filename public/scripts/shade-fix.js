@@ -1,16 +1,31 @@
-function sizeFix(selector = '.shade', paramBody = document.body.clientHeight, param = 'height') {
-    const el = document.querySelector(selector);
-    if (el.forEach)
-        el.forEach(e => e.style[param] = paramBody + 'px')
-    else 
-        el.style[param] = paramBody + 'px';
-}
+(function() {
+    function getFixSize(selector = '.shade', param = 'height') {
+        var elems = document.querySelectorAll(selector);
 
-window.onload = () => {
-    sizeFix();
-    // document.querySelector('.shade').style.height = document.body.clientHeight + 'px';
-}
+        return function() {
+            elems.forEach(e => e.style[param] = document.body['client' + capitalize(param)] + 'px');
+        }
+    }
 
-window.onresize = () => {
-    sizeFix();
-}
+    var fixSize = getFixSize();
+
+    window.addEventListener('load', fixSize);
+    window.addEventListener('resize', debounce(fixSize, 200));
+
+    function capitalize(str) {
+        return str.substr(0, 1).toUpperCase() + str.substr(1);
+    }
+
+    function debounce(fn, timeout, ctx = window) {
+        var invoked = false;
+
+        return function() {
+            invoked || fn.apply(ctx, arguments);
+            invoked = true;
+
+            setTimeout(() => {
+                invoked = false;
+            }, timeout);
+        }
+    }
+})();
