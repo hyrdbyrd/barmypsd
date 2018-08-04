@@ -21,8 +21,7 @@ globby(path.join(PATH_TO_LESS, '*.less')).then(lessList =>
             .then(output => output.css)
             .then(css => {
                 const filename = path.basename(lessList[idx]).replace(/\.less$/, '.css');
-
-                return writeFile(path.join(OUTPUT_DIR, filename), css)
+                return writeFile(path.join(OUTPUT_DIR, filename), css);
             })
     ))
 ).catch(console.error);
