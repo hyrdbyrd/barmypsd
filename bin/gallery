@@ -5,6 +5,6 @@ const util = require('util');
 const writeFile = util.promisify(require('fs').writeFile);
 
 require('../gallery')()
-    .then(paths => writeFile(path.join(__dirname, '..', 'public', 'images', 'gallery.json'), JSON.stringify(paths)))
+    .then(paths => writeFile(path.join(__dirname, '..', 'public', 'images', 'slider', 'gallery.json'), JSON.stringify(paths)))
     .then(() => console.log('JSON ok!'))
     .catch(console.error);
